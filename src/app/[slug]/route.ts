@@ -8,6 +8,7 @@ export async function GET(
   { params }: { params: { slug: string } }
 ) {
   try {
+    console.log("test22")
     const { slug } = params;
 
     const link = await prisma.link.findFirst({
