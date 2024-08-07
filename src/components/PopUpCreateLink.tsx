@@ -15,7 +15,7 @@ const PopUpCreateLink: React.FC<PopUpCreateLinkProps> = ({ onClose }) => {
 
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:3000/api/links", {
+      const response = await fetch("https://cesar-gym.vercel.app/api/links", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

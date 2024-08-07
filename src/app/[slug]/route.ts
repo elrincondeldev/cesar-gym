@@ -14,7 +14,7 @@ export async function GET(
 
     // Buscar el enlace en la base de datos
     const link = await prisma.link.findFirst({
-      where: { url: `http://localhost:3000/${slug}` },
+      where: { url: `https://cesar-gym.vercel.app/${slug}` },
     });
 
     if (!link) {

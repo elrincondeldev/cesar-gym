@@ -12,7 +12,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/links`);
+        const response = await fetch(`https://cesar-gym.vercel.app/api/links`);
         console.log("Test");
 
         if (response.status === 200) {

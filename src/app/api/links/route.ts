@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
 
     const newLink = await prisma.link.create({
       data: {
-        url: `http://localhost:3000/${name}`,
+        url: `https://cesar-gym.vercel.app/${name}`,
         active: true,
         uses: 1,
       },
