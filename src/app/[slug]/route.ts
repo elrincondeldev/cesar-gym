@@ -1,5 +1,3 @@
-// src/app/[slug]/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
@@ -11,6 +9,7 @@ export async function GET(
 ) {
   try {
     const { slug } = params;
+    console.log(`Fetching link with slug: ${slug}`); // Agrega un log para verificar el slug
 
     // Buscar el enlace en la base de datos
     const link = await prisma.link.findFirst({
@@ -18,12 +17,12 @@ export async function GET(
     });
 
     if (!link) {
-      // Redirigir a una página de error si el enlace no existe
+      console.log("Link not found"); // Log si el enlace no se encuentra
       return NextResponse.redirect("/404", 302);
     }
 
     if (link.uses <= 0) {
-      // Devolver un error si no hay usos restantes
+      console.log("No remaining uses"); // Log si no hay usos restantes
       return NextResponse.json(
         { error: "No remaining uses for this link" },
         { status: 410 }
@@ -36,6 +35,7 @@ export async function GET(
       data: { uses: link.uses - 1 },
     });
 
+    console.log("Redirecting to external URL"); // Log antes de redirigir
     // Redirigir al destino deseado
     const response = NextResponse.redirect("https://wa.me/34601506486", 302);
 
@@ -52,7 +52,7 @@ export async function GET(
 
     return response;
   } catch (error) {
-    console.error(error);
+    console.error("Error in GET request:", error); // Log del error
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }
