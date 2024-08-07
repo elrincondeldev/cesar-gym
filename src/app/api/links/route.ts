@@ -20,7 +20,18 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json(newLink, { status: 201 });
+    const response = NextResponse.json(newLink, { status: 201 });
+    // Set CORS headers
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    response.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+    return response;
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -33,7 +44,18 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const links = await prisma.link.findMany();
-    return NextResponse.json(links, { status: 200 });
+    const response = NextResponse.json(links, { status: 200 });
+    // Set CORS headers
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    response.headers.set(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+    return response;
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -41,4 +63,19 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// Handle OPTIONS method for CORS preflight requests
+export async function OPTIONS(request: NextRequest) {
+  const response = NextResponse.json({}, { status: 204 });
+  response.headers.set("Access-Control-Allow-Origin", "*");
+  response.headers.set(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  response.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+  return response;
 }
