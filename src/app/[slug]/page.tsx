@@ -1,74 +1,34 @@
-import { NextRequest, NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+// src/app/[slug]/page.tsx
 
-const prisma = new PrismaClient();
+import RedirectPage from "./RedirectPage";
+import UAParser from "ua-parser-js";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
-  try {
-    const p = "34601506486";
-    const m = "test";
-    console.log("test22");
+export async function getServerSideProps(context: any) {
+  const ua = UAParser(context.req.headers["user-agent"]);
+  const { slug } = context.query;
 
-    const { slug } = params;
+  // Ejemplo de cómo podrías obtener parámetros adicionales
+  const phoneNumber = "34601506486"; // Número de teléfono de destino
+  const message = "Hola, ¿cómo estás?"; // Mensaje a enviar
 
-    const link = await prisma.link.findFirst({
-      where: { url: `https://cesar-gym.vercel.app/${slug}` },
-    });
+  // Determinar la URL según el tipo de dispositivo
+  const deviceType = ua.device.type || "desktop";
+  const url =
+    deviceType === "desktop"
+      ? `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(
+          message
+        )}`
+      : `whatsapp://send?phone=${phoneNumber}&text=${encodeURIComponent(
+          message
+        )}`;
 
-    if (!link) {
-      console.log("Link not found");
-      return NextResponse.redirect("/404", 302);
-    }
-
-    if (link.uses <= 0) {
-      console.log("No remaining uses");
-      return NextResponse.json(
-        { error: "No remaining uses for this link" },
-        { status: 410 }
-      );
-    }
-
-    await prisma.link.update({
-      where: { id: link.id },
-      data: { uses: link.uses - 1 },
-    });
-
-    console.log("Redirecting to external URL");
-    const response = Response.redirect(`whatsapp://send?phone=${p}&text=${m}`);
-
-    response.headers.set("Access-Control-Allow-Origin", "*");
-    response.headers.set(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS"
-    );
-    response.headers.set(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authorization"
-    );
-
-    return response;
-  } catch (error) {
-    console.error("Error in GET request:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
-  }
+  return {
+    props: {
+      url,
+    },
+  };
 }
 
-export async function OPTIONS(request: NextRequest) {
-  const response = NextResponse.json({}, { status: 204 });
-  response.headers.set("Access-Control-Allow-Origin", "*");
-  response.headers.set(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS"
-  );
-  response.headers.set(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization"
-  );
-  return response;
+export default function SlugPage({ url }: { url: string }) {
+  return <RedirectPage url={url} />;
 }
