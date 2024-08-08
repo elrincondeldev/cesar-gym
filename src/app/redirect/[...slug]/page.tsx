@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 export default function RedirectPage() {
   redirect(
-    "https://web.whatsapp.com/send?phone=34601506486&text=Hello, this is a test message"
+    "whatsapp://send?phone=34601506486&text=Hello, this is a test message"
   );
   return null; // Esta página no renderiza nada porque se hace la redirección inmediatamente
 }
