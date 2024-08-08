@@ -30,17 +30,17 @@ function Dashboard() {
     <div className="flex flex-col items-center justify-center min-h-screen p-4 md:p-8">
       {links.length > 0 ? (
         <div className="flex flex-col gap-5 items-center w-full max-w-6xl">
-          <div className="overflow-x-auto relative shadow-md sm:rounded-lg w-full">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <div className="w-full max-w-[90vw] overflow-x-auto relative shadow-md sm:rounded-lg">
+            <table className="min-w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th scope="col" className="py-3 px-4 md:px-6">
+                  <th scope="col" className="py-3 px-2 sm:px-4 md:px-6">
                     Enlaces
                   </th>
-                  <th scope="col" className="py-3 px-4 md:px-6">
+                  <th scope="col" className="py-3 px-2 sm:px-4 md:px-6">
                     Usos restantes
                   </th>
-                  <th scope="col" className="py-3 px-4 md:px-6">
+                  <th scope="col" className="py-3 px-2 sm:px-4 md:px-6">
                     Estado
                   </th>
                 </tr>
@@ -58,9 +58,11 @@ function Dashboard() {
                       key={link.id}
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                     >
-                      <td className="py-4 px-4 md:px-6">{redirectUrl}</td>
-                      <td className="py-4 px-4 md:px-6">{link.uses}</td>
-                      <td className="py-4 px-4 md:px-6">
+                      <td className="py-4 px-2 sm:px-4 md:px-6 break-words">
+                        {redirectUrl}
+                      </td>
+                      <td className="py-4 px-2 sm:px-4 md:px-6">{link.uses}</td>
+                      <td className="py-4 px-2 sm:px-4 md:px-6">
                         {link.active ? "Activado" : "Desactivado"}
                       </td>
                     </tr>
@@ -71,7 +73,7 @@ function Dashboard() {
           </div>
           <button
             onClick={() => setShowPopUp(true)}
-            className="bg-gray-50 text-black font-bold px-4 py-2 rounded-md md:px-5 md:py-3"
+            className="bg-gray-50 text-black font-bold px-4 py-2 rounded-md md:px-5 md:py-3 mt-4"
           >
             Crear nuevo enlace
           </button>
