@@ -16,7 +16,7 @@ export default function RedirectPage() {
       }
 
       try {
-        const response = await fetch(`/api/redirection/${slug}`);
+        const response = await fetch(`/api/cesar/${slug}`);
         const data = await response.json();
         console.log(response);
 
