@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Loader from "@/components/Loader";
 import PopUpCreateLink from "./PopUpCreateLink";
 
@@ -18,7 +17,6 @@ function Dashboard() {
         if (response.status === 200) {
           const data = await response.json();
           setLinks(data);
-        } else {
         }
       } catch (error) {
         console.log(error);
@@ -49,18 +47,26 @@ function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {links.map((link: any) => (
-                    <tr
-                      key={link.id}
-                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                    >
-                      <td className="py-4 px-6">{link.url}</td>
-                      <td className="py-4 px-6">{link.uses}</td>
-                      <td className="py-4 px-6">
-                        {link.active ? "Activado" : "Desactivado"}
-                      </td>
-                    </tr>
-                  ))}
+                  {links.map((link: any) => {
+                    // Crear una nueva URL con /redirect/ prefijo
+                    const redirectUrl = link.url.replace(
+                      /https:\/\/cesar-gym.vercel.app\/(.+)/,
+                      "https://cesar-gym.vercel.app/redirect/$1"
+                    );
+
+                    return (
+                      <tr
+                        key={link.id}
+                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                      >
+                        <td className="py-4 px-6">{redirectUrl}</td>
+                        <td className="py-4 px-6">{link.uses}</td>
+                        <td className="py-4 px-6">
+                          {link.active ? "Activado" : "Desactivado"}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
