@@ -1,9 +1,46 @@
-// src/app/redirect/[...slug]/page.tsx
-import { redirect } from "next/navigation";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function RedirectPage() {
-  redirect(
-    "whatsapp://send?phone=34601506486&text=Hello, this is a test message"
-  );
-  return null; // Esta página no renderiza nada porque se hace la redirección inmediatamente
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkLink = async () => {
+      const slug = window.location.pathname.split("/").pop();
+      if (!slug) {
+        router.push("/404");
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/redirection/${slug}`);
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Redirigir si el enlace es válido
+          window.location.href =
+            "whatsapp://send?phone=34601506486&text=Hello, this is a test message";
+        } else {
+          // Redirigir a una página de error si el enlace no es válido
+          router.push("/404");
+        }
+      } catch (error) {
+        console.error("Error fetching link:", error);
+        router.push("/500"); // Redirigir a una página de error en caso de fallo
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkLink();
+  }, [router]);
+
+  if (loading) {
+    return <p>Loading...</p>; // O cualquier otro indicador de carga
+  }
+
+  return null; // Esta página no renderiza nada ya que la redirección es inmediata
 }
