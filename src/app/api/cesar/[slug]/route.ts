@@ -1,4 +1,4 @@
-// src/app/api/redirection/route.ts
+// src/app/api/cesar/[slug]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
@@ -8,10 +8,10 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
-  try {
-    const { slug } = params;
+  const { slug } = params;
 
-    // Verificar si el link existe en la base de datos
+  try {
+    // Verifica si el enlace existe en la base de datos
     const link = await prisma.link.findFirst({
       where: { url: `https://cesar-gym.vercel.app/${slug}` },
     });
@@ -27,7 +27,7 @@ export async function GET(
       );
     }
 
-    // Actualizar el número de usos restantes
+    // Actualiza el número de usos restantes
     await prisma.link.update({
       where: { id: link.id },
       data: { uses: link.uses - 1 },

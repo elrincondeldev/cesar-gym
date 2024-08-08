@@ -18,6 +18,7 @@ export default function RedirectPage() {
       try {
         const response = await fetch(`/api/redirection/${slug}`);
         const data = await response.json();
+        console.log(response);
 
         if (response.ok && data.success) {
           // Redirigir si el enlace es válido
@@ -29,7 +30,6 @@ export default function RedirectPage() {
         }
       } catch (error) {
         console.error("Error fetching link:", error);
-        router.push("/500"); // Redirigir a una página de error en caso de fallo
       } finally {
         setLoading(false);
       }
