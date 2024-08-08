@@ -8,8 +8,6 @@ export async function GET(
   { params }: { params: { slug: string } }
 ) {
   try {
-    console.log("test22");
-
     const { slug } = params;
 
     const link = await prisma.link.findFirst({
@@ -17,12 +15,10 @@ export async function GET(
     });
 
     if (!link) {
-      console.log("Link not found");
       return NextResponse.redirect("/404", 302);
     }
 
     if (link.uses <= 0) {
-      console.log("No remaining uses");
       return NextResponse.json(
         { error: "No remaining uses for this link" },
         { status: 410 }
@@ -34,9 +30,17 @@ export async function GET(
       data: { uses: link.uses - 1 },
     });
 
-    console.log("Redirecting to external URL");
     const response = NextResponse.redirect("https://wa.me/34601506486", 302);
 
+    // Deshabilitar caché para esta respuesta
+    response.headers.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
+    response.headers.set("Pragma", "no-cache");
+    response.headers.set("Expires", "0");
+
+    // Asegurar compatibilidad con CORS
     response.headers.set("Access-Control-Allow-Origin", "*");
     response.headers.set(
       "Access-Control-Allow-Methods",
