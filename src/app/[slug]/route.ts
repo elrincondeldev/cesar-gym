@@ -37,10 +37,7 @@ export async function GET(
     });
 
     console.log("Redirecting to external URL");
-    const response = NextResponse.redirect(
-      `whatsapp://send?phone=${p}&text=${m}`,
-      302
-    );
+    const response = Response.redirect(`whatsapp://send?phone=${p}&text=${m}`);
 
     response.headers.set("Access-Control-Allow-Origin", "*");
     response.headers.set(
