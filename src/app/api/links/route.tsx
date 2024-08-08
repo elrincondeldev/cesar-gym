@@ -1,4 +1,5 @@
-// src/app/[slug]/page.tsx
+"use client";
+
 import { useEffect } from "react";
 import UAParser from "ua-parser-js";
 
